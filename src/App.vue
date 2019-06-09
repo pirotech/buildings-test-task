@@ -6,11 +6,13 @@
       <div v-for="(client, index) in clients" :key="index" class="client">
         <UiTextLine
           class="client__name"
+          :isValid="client.isValid"
           :value="client.name"
           @change="(value) => nameChanged(value, index)"
         />
         <UiTextLine
           class="client__phone"
+          :isValid="client.isValid"
           :value="client.phone"
           :mask="phoneMask"
           @change="(value) => phoneChanged(value, index)"
@@ -75,7 +77,7 @@
       </div>
     </div>
     <div class="buttons">
-      <button class="button submit-button">Отправить</button>
+      <button class="button submit-button" @click="submit">Отправить</button>
       <button class="button load-button">Загрузить</button>
     </div>
   </div>
@@ -99,6 +101,7 @@ export default {
         {
           name: '',
           phone: '',
+          isValid: true,
         }
       ],
       ownerships: [],
@@ -117,6 +120,7 @@ export default {
       this.clients.push({
         name: '',
         phone: '',
+        isValid: true,
       });
     },
     ownershipSelected(value) {
@@ -125,6 +129,29 @@ export default {
     toggleTable() {
       this.tableHidden = !this.tableHidden;
     },
+    submit() {
+      this.clients = this.clients.map(item => {
+        const isValid = (item.name !== '') && (item.phone !== '') && !item.phone.includes('_');
+        return {
+          ...item,
+          isValid: isValid,
+        };
+      });
+
+      let formValid = this.clients.every(item => item.isValid);
+      if (!formValid) {
+        return;
+      }
+
+      axios({
+        method: 'post',
+        url: '/path/to/submit',
+        data: {
+          clients: this.clients,
+          ownership: this.ownership,
+        },
+      });
+    }
   },
   computed: {
     object() {

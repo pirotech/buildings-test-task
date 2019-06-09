@@ -2,6 +2,7 @@
   <VueMaskedInput
     v-if="mask"
     class="text-line"
+    :class="{'text-line_invalid': !isValid}"
     :value="value"
     :mask="mask"
     @input="changed"
@@ -9,6 +10,7 @@
   <input
     v-else
     class="text-line"
+    :class="{'text-line_invalid': !isValid}"
     type="text"
     :value="value"
     @input="changed($event.target.value)"
@@ -24,6 +26,13 @@ export default {
     VueMaskedInput,
   },
   props: {
+    isValid: {
+      type: Boolean,
+      required: false,
+      default() {
+        return true;
+      },
+    },
     value: {
       type: String,
       required: true,
@@ -53,5 +62,9 @@ export default {
   background-color: $brown-100;
   font-size: 16px;
   color: $brown;
+  &_invalid {
+    background-color: $red-300;
+    border-color: $red;
+  }
 }
 </style>
