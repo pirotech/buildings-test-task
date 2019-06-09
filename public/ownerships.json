@@ -1,0 +1,41 @@
+[
+  {
+    "name": "ownership 1",
+    "object": "object 1",
+    "apartment": "apartment 1",
+    "axis": "axis 1",
+    "squares": {
+      "summary": 120,
+      "live": [
+        {
+          "name": "Live 1",
+          "value": 30
+        },
+        {
+          "name": "Live 1",
+          "value": 30
+        },
+        {
+          "name": "Live 1",
+          "value": 30
+        }
+      ],
+      "noneLive": [
+        {
+          "name": "None live 1",
+          "value": 30
+        },
+        {
+          "name": "None live 1",
+          "value": 30
+        }
+      ],
+      "lowLive": [
+        {
+          "name": "Low live 1",
+          "value": 30
+        }
+      ]
+    }
+  }
+]

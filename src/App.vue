@@ -20,22 +20,22 @@
       <h4 class="ownership__title">Вид собственности</h4>
       <UiSelect
         class="ownership"
-        :options="options"
-        :value="value"
-        @select="select"
+        :options="ownerships"
+        :value="ownership"
+        @select="ownershipSelected"
       />
       <div class="line">
         <div class="object">
           <h4 class="object__title">Объект:</h4>
-          <p class="object__value">O1</p>
+          <p class="object__value">{{ownership && ownership.object || '-'}}</p>
         </div>
         <div class="apartment">
           <h4 class="apartment__title">Квартира:</h4>
-          <p class="apartment__value">O1</p>
+          <p class="apartment__value">{{ownership && ownership.apartment || '-'}}</p>
         </div>
         <div class="axis">
           <h4 class="axis__title">Строительные оси:</h4>
-          <p class="axis__value">O1</p>
+          <p class="axis__value">{{ownership && ownership.axis || '-'}}</p>
         </div>
       </div>
       <div
@@ -45,41 +45,44 @@
       >
         <h4>Площадь</h4>
         <p class="ellipsis"></p>
-        <p class="value">30m2</p>
+        <p class="value">{{ownership && ownership.squares && ownership.squares.summary || '-'}}m2</p>
       </div>
-      <div v-show="tableHidden" class="square-table">
+      <div v-show="!tableHidden" class="square-table">
         <div class="column">
           <h4 class="column__header">Жилая</h4>
-          <div class="column-line">
-            <p>Площадь</p>
+          <div v-for="(item, index) in live" :key="index" class="column-line">
+            <p>{{item.name || '-'}}</p>
             <p class="ellipsis"></p>
-            <p class="value">30m2</p>
+            <p class="value">{{item.value || '-'}}</p>
           </div>
         </div>
         <div class="column">
           <h4 class="column__header">Нежилая</h4>
-          <div class="column-line">
-            <p>Площадь</p>
+          <div v-for="(item, index) in noneLive" :key="index" class="column-line">
+            <p>{{item.name || '-'}}</p>
             <p class="ellipsis"></p>
-            <p class="value">30m2</p>
+            <p class="value">{{item.value || '-'}}</p>
           </div>
         </div>
         <div class="column">
           <h4 class="column__header">Площадь с пониж. кооф.</h4>
-          <div class="column-line">
-            <p>Площадь</p>
+          <div v-for="(item, index) in noneLive" :key="index" class="column-line">
+            <p>{{item.name || '-'}}</p>
             <p class="ellipsis"></p>
-            <p class="value">30m2</p>
+            <p class="value">{{item.value || '-'}}</p>
           </div>
         </div>
       </div>
     </div>
-    <button class="button submit-button">Отправить</button>
-    <button class="button load-button">Загрузить</button>
+    <div class="buttons">
+      <button class="button submit-button">Отправить</button>
+      <button class="button load-button">Загрузить</button>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import UiSelect from './shared/components/UiSelect';
 import UiTextLine from './shared/components/UiTextLine';
 
@@ -98,20 +101,8 @@ export default {
           phone: '',
         }
       ],
-      options: [
-        {
-          value: 'a',
-          label: 'a',
-        },
-        {
-          value: 'b',
-          label: 'b',
-        }
-      ],
-      value: {
-        value: 'a',
-        label: 'a',
-      },
+      ownerships: [],
+      ownership: null,
       tableHidden: false,
     };
   },
@@ -128,12 +119,41 @@ export default {
         phone: '',
       });
     },
-    select(value) {
+    ownershipSelected(value) {
       this.value = value;
     },
     toggleTable() {
       this.tableHidden = !this.tableHidden;
     },
+  },
+  computed: {
+    live() {
+      const hasList = this.ownership && this.ownership.squares && this.ownership.squares.live;
+      return hasList && this.ownership.squares.live || [];
+    },
+    noneLive() {
+      const hasList = this.ownership && this.ownership.squares && this.ownership.squares.noneLive;
+      return hasList && this.ownership.squares.noneLive || [];
+    },
+    lowLive() {
+      const hasList = this.ownership && this.ownership.squares && this.ownership.squares.lowLive;
+      return hasList && this.ownership.squares.lowLive || [];
+    },
+  },
+  mounted() {
+    axios({
+      method: 'get',
+      url: '/ownerships.json'
+    }).then(response => {
+      this.ownerships = response.data.map((item, index) => ({
+        ...item,
+        value: index,
+        label: item.name || '',
+      }));
+      this.ownership = this.ownerships.length > 0 ? this.ownerships[0] : null;
+    }).catch(error => {
+      console.error(error);
+    });
   }
 }
 </script>
@@ -196,13 +216,13 @@ export default {
         border-bottom: 2px dotted #333;
       }
       &:after {
-        content: '⏷';
+        content: '⏶';
         margin-top: -4px;
         color: #333;
       }
       &_hidden {
         &:after {
-          content: '⏶';
+          content: '⏷';
         }
       }
     }
@@ -237,11 +257,17 @@ export default {
       }
     }
   }
-  .submit-button {
-    margin-top: 20px;
-  }
-  .load-button {
-    margin-top: 10px;
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 840px;
+    .submit-button {
+      margin-top: 20px;
+    }
+    .load-button {
+      margin-top: 10px;
+    }
   }
 }
 </style>
