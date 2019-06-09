@@ -6,13 +6,13 @@
       <div v-for="(client, index) in clients" :key="index" class="client">
         <UiTextLine
           class="client__name"
-          :isValid="client.isValid"
+          :isValid="client.nameValid"
           :value="client.name"
           @change="(value) => nameChanged(value, index)"
         />
         <UiTextLine
           class="client__phone"
-          :isValid="client.isValid"
+          :isValid="client.phoneValid"
           :value="client.phone"
           :mask="phoneMask"
           @change="(value) => phoneChanged(value, index)"
@@ -55,7 +55,7 @@
           <div v-for="(item, index) in live" :key="index" class="column-line">
             <p>{{item.name || '-'}}</p>
             <p class="ellipsis"></p>
-            <p class="value">{{item.value || '-'}}</p>
+            <p class="value">{{item.value || '-'}}m2</p>
           </div>
         </div>
         <div class="column">
@@ -63,7 +63,7 @@
           <div v-for="(item, index) in noneLive" :key="index" class="column-line">
             <p>{{item.name || '-'}}</p>
             <p class="ellipsis"></p>
-            <p class="value">{{item.value || '-'}}</p>
+            <p class="value">{{item.value || '-'}}m2</p>
           </div>
         </div>
         <div class="column">
@@ -71,7 +71,7 @@
           <div v-for="(item, index) in noneLive" :key="index" class="column-line">
             <p>{{item.name || '-'}}</p>
             <p class="ellipsis"></p>
-            <p class="value">{{item.value || '-'}}</p>
+            <p class="value">{{item.value || '-'}}m2</p>
           </div>
         </div>
       </div>
@@ -101,7 +101,8 @@ export default {
         {
           name: '',
           phone: '',
-          isValid: true,
+          nameValid: true,
+          phoneValid: true,
         }
       ],
       ownerships: [],
@@ -120,7 +121,8 @@ export default {
       this.clients.push({
         name: '',
         phone: '',
-        isValid: true,
+        nameValid: true,
+        phoneValid: true,
       });
     },
     ownershipSelected(value) {
@@ -131,14 +133,16 @@ export default {
     },
     submit() {
       this.clients = this.clients.map(item => {
-        const isValid = (item.name !== '') && (item.phone !== '') && !item.phone.includes('_');
+        const nameValid = item.name !== '';
+        const phoneValid = item.phone !== '' && !item.phone.includes('_');
         return {
           ...item,
-          isValid: isValid,
+          nameValid,
+          phoneValid,
         };
       });
 
-      let formValid = this.clients.every(item => item.isValid);
+      let formValid = this.clients.every(item => item.nameValid && item.phoneValid);
       if (!formValid) {
         return;
       }

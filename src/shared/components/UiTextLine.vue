@@ -62,6 +62,7 @@ export default {
   background-color: $brown-100;
   font-size: 16px;
   color: $brown;
+  transition: all 0.5s;
   &_invalid {
     background-color: $red-300;
     border-color: $red;
