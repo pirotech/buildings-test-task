@@ -127,7 +127,8 @@ export default {
       });
     },
     ownershipSelected(value) {
-      this.value = value;
+      console.log(value);
+      this.ownership = value;
     },
     toggleTable() {
       this.tableHidden = !this.tableHidden;

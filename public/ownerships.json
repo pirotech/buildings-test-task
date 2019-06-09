@@ -37,5 +37,44 @@
         }
       ]
     }
+  },
+  {
+    "name": "ownership 2",
+    "object": "object 2",
+    "apartment": "apartment 2",
+    "axis": "axis 2",
+    "squares": {
+      "summary": 120,
+      "live": [
+        {
+          "name": "Live 2",
+          "value": 30
+        },
+        {
+          "name": "Live 2",
+          "value": 30
+        },
+        {
+          "name": "Live 2",
+          "value": 30
+        }
+      ],
+      "noneLive": [
+        {
+          "name": "None live 2",
+          "value": 30
+        },
+        {
+          "name": "None live 2",
+          "value": 30
+        }
+      ],
+      "lowLive": [
+        {
+          "name": "Low live 2",
+          "value": 30
+        }
+      ]
+    }
   }
 ]
