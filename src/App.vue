@@ -78,13 +78,14 @@
     </div>
     <div class="buttons">
       <button class="button submit-button" @click="submit">Отправить</button>
-      <button class="button load-button">Загрузить</button>
+      <button class="button load-button" @click="load">Загрузить</button>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import faker from 'faker';
 import UiSelect from './shared/components/UiSelect';
 import UiTextLine from './shared/components/UiTextLine';
 
@@ -155,7 +156,22 @@ export default {
           ownership: this.ownership,
         },
       });
-    }
+    },
+    load() {
+      const clientsCount = Math.round(1 + Math.random() * 4);
+      let clients = [];
+      for (let i = 0; i < clientsCount; ++i) {
+        const [x1, x2, x3] = faker.phone.phoneNumberFormat().split('-');
+        const phone = `+7 (${x1}) ${x2}-${x3.slice(0, 2)}-${x3.slice(2, 4)}`;
+        clients.push({
+          name: faker.name.findName(),
+          phone: phone,
+          nameValid: true,
+          phoneValid: true,
+        });
+      }
+      this.clients = clients;
+    },
   },
   computed: {
     object() {
