@@ -6,22 +6,21 @@ h1, h2, h3, h4, h5, h6, a {
   text-decoration: none;
   outline: none;
   list-style: none;
+  font-family: Helvetica, sans-serif;
 }
 
 html *, html :after, html :before {
   box-sizing: border-box;
 }
 
-h2 {
-  font-size: 30px;
-  font-weight: 600;
-}
 h3 {
-  font-size: 24px;
+  font-size: 30px;
+  font-weight: 800;
+  color: #333;
 }
 h4 {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  color: #333;
 }
 
 @import "variables";
