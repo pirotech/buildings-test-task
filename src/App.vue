@@ -17,9 +17,9 @@
         />
         <button class="button" @click="addClient">+</button>
       </div>
-      <h4 class="type__title">Вид собственности</h4>
+      <h4 class="ownership__title">Вид собственности</h4>
       <UiSelect
-        class="type"
+        class="ownership"
         :options="options"
         :value="value"
         @select="select"
@@ -38,12 +38,16 @@
           <p class="axis__value">O1</p>
         </div>
       </div>
-      <div class="square-title">
+      <div
+        class="square-title"
+        :class="{'square-title_hidden': tableHidden}"
+        @click="toggleTable"
+      >
         <h4>Площадь</h4>
         <p class="ellipsis"></p>
         <p class="value">30m2</p>
       </div>
-      <div class="square-table">
+      <div v-show="tableHidden" class="square-table">
         <div class="column">
           <h4 class="column__header">Жилая</h4>
           <div class="column-line">
@@ -108,7 +112,7 @@ export default {
         value: 'a',
         label: 'a',
       },
-
+      tableHidden: false,
     };
   },
   methods: {
@@ -127,6 +131,9 @@ export default {
     select(value) {
       this.value = value;
     },
+    toggleTable() {
+      this.tableHidden = !this.tableHidden;
+    },
   }
 }
 </script>
@@ -142,6 +149,7 @@ export default {
   flex: 0 1 1200px;
   margin: 50px;
   .form {
+    width: 840px;
     padding: 20px;
     margin-top: 20px;
     border: 1px solid #ddd;
@@ -153,10 +161,10 @@ export default {
         margin-right: 20px;
       }
     }
-    .type__title {
+    .ownership__title {
       margin-top: 40px;
     }
-    .type {
+    .ownership {
       margin-top: 10px;
     }
     .line {
@@ -189,6 +197,8 @@ export default {
       }
       &:after {
         content: '⏷';
+        margin-top: -4px;
+        color: #333;
       }
       &_hidden {
         &:after {
@@ -199,7 +209,6 @@ export default {
     .square-table {
       display: flex;
       flex-direction: row;
-      width: 800px;
       margin-top: 10px;
       .column {
         display: flex;
