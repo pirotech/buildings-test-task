@@ -3,19 +3,19 @@
     <h3>Стороны и объект договора</h3>
     <div class="form">
       <h4 class="client__title">Участник договора</h4>
-      <div class="client">
+      <div v-for="(client, index) in clients" :key="index" class="client">
         <UiTextLine
           class="client__name"
-          :value="name"
-          @change="(value) => nameChanged(value, 1)"
+          :value="client.name"
+          @change="(value) => nameChanged(value, index)"
         />
         <UiTextLine
           class="client__phone"
-          :value="phone"
-          :mask="mask"
-          @change="(value) => phoneChanged(value, 1)"
+          :value="client.phone"
+          :mask="phoneMask"
+          @change="(value) => phoneChanged(value, index)"
         />
-        <button class="button">+</button>
+        <button class="button" @click="addClient">+</button>
       </div>
       <h4 class="type__title">Вид собственности</h4>
       <UiSelect
@@ -87,6 +87,13 @@ export default {
   },
   data() {
     return {
+      phoneMask: '\\+7 (111) 111-11-11',
+      clients: [
+        {
+          name: '',
+          phone: '',
+        }
+      ],
       options: [
         {
           value: 'a',
@@ -101,21 +108,25 @@ export default {
         value: 'a',
         label: 'a',
       },
-      mask: '\\+7 (111) 111-11-11',
-      phone: '',
-      name: '',
+
     };
   },
   methods: {
+    nameChanged(value, index) {
+      this.clients[index].name = value;
+    },
+    phoneChanged(value, index) {
+      this.clients[index].phone = value;
+    },
+    addClient() {
+      this.clients.push({
+        name: '',
+        phone: '',
+      });
+    },
     select(value) {
       this.value = value;
     },
-    phoneChanged(value, number) {
-      this.phone = value;
-    },
-    nameChanged(value, number) {
-      this.name = value;
-    }
   }
 }
 </script>
