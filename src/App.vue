@@ -27,15 +27,15 @@
       <div class="line">
         <div class="object">
           <h4 class="object__title">Объект:</h4>
-          <p class="object__value">{{ownership && ownership.object || '-'}}</p>
+          <p class="object__value">{{object || '-'}}</p>
         </div>
         <div class="apartment">
           <h4 class="apartment__title">Квартира:</h4>
-          <p class="apartment__value">{{ownership && ownership.apartment || '-'}}</p>
+          <p class="apartment__value">{{apartment || '-'}}</p>
         </div>
         <div class="axis">
           <h4 class="axis__title">Строительные оси:</h4>
-          <p class="axis__value">{{ownership && ownership.axis || '-'}}</p>
+          <p class="axis__value">{{axis || '-'}}</p>
         </div>
       </div>
       <div
@@ -45,7 +45,7 @@
       >
         <h4>Площадь</h4>
         <p class="ellipsis"></p>
-        <p class="value">{{ownership && ownership.squares && ownership.squares.summary || '-'}}m2</p>
+        <p class="value">{{summary || '-'}}m2</p>
       </div>
       <div v-show="!tableHidden" class="square-table">
         <div class="column">
@@ -127,6 +127,18 @@ export default {
     },
   },
   computed: {
+    object() {
+      return this.ownership && this.ownership.object;
+    },
+    apartment() {
+      return this.ownership && this.ownership.apartment;
+    },
+    axis() {
+      return this.ownership && this.ownership.axis;
+    },
+    summary() {
+      return this.ownership && this.ownership.squares && this.ownership.squares.summary;
+    },
     live() {
       const hasList = this.ownership && this.ownership.squares && this.ownership.squares.live;
       return hasList && this.ownership.squares.live || [];
